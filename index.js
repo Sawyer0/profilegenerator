@@ -25,20 +25,30 @@ const promptUser = () => {
         name: 'office number',
         message: 'Enter an office number.',
       },
-  ])
-
-   // list for add an engineer or an intern or to finish building my team
-
-
-inquirer
-  .menu([
-    {
+    // list for add an engineer or an intern or to finish building my team
+      {
         type: 'list',
-        name: 'final question',
+        name: 'final prompt',
         message: 'Add an engineer or an intern or to finish building your team.',
-        choices: ['engineer', 'intern', 'finish'],
+        choices: ['engineer', 'intern', 'nobody'],
+        default: 'nobody'
     }
   ])
+
+  const answer = engineer;
+  
+  switch (true) {
+      // If answer is engineer 
+      case answer = engineer:
+          console.log("engineer");
+          break;
+      // If answer is intern
+      case answer = intern:
+          console.log("intern");
+          break;
+      default:
+          console.log("nobody");
+  }
 
 // WHEN I select the engineer option
 // THEN I am prompted with enter the engineer’s name, ID, email, and GitHub username,
