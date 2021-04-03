@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "inquirer-menu": "^1.0.0"
+  }
+}
