@@ -1,58 +1,63 @@
 const inquirer = require("inquirer");
+
+const fs = require("fs");
+
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
+const Employee = require("./lib/Employee");
+const Manager = require("./lib/Manager");
+
 let teammateProfile = [];
 
 // --------- prompt for info
 // input for team manager’s name, employee ID, email address, and office number
 
-const promptUser = () => {
-  return inquirer
+promptUser()
+
+function promptUser() {
+  inquirer
     .prompt([
       {
         type: "input",
-        name: "team managers name",
-        message: "Enter a manager’s name.",
+        name: "team profile name",
+        message: "What is your team name?",
+      },
+    ])
+    .then(function (data) {
+      const teamProfileName = data.teamProfileName;
+      teammateProfile.push(teamProfileName);
+      addManager();
+    });
+}
+
+function addManager() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter managers name.",
+        name: "name",
       },
       {
         type: "number",
-        name: "employee ID",
-        message: "Enter an employee ID.",
+        message: "Enter managers ID number.",
+        name: "id",
       },
       {
         type: "input",
-        name: "email address",
-        message: "Enter an email address.",
-      },
-      {
-        type: "number",
-        name: "office number",
-        message: "Enter an office number.",
-      },
-      // list for add an engineer or an intern or to finish building my team
-      {
-        type: "list",
-        name: "final prompt",
-        message:
-          "Add an engineer or an intern or to finish building your team.",
-        choices: ["Engineer", "Intern", "Nobody"],
-        default: "Nobody",
+        message: "Enter managers email address.",
+        name: "email",
       },
     ])
-
     .then(function (data) {
-      switch (data.addTeammates) {
-        case "Yes, an engineer.":
-          addEngineer();
-          break;
-
-        case "Yes, an intern.":
-          addIntern();
-          break;
-        case "No, I am finished.":
-          finishProfile();
-          break;
-      }
+      const name = data.name;
+      const id = data.id;
+      const email = data.email;
+      const teammate = new Manager(name, id, email);
+      teammateProfile.push(teammate);
+      addTeammates();
     });
-};
+}
 
 function addEngineer() {
   inquirer
@@ -87,7 +92,7 @@ function addEngineer() {
       teammateProfile.push(teammate);
       addTeammates();
     });
-};
+}
 
 function addIntern() {
   inquirer
@@ -122,7 +127,36 @@ function addIntern() {
       teammateProfile.push(teammate);
       addTeammates();
     });
-};
+}
+
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter employees name.",
+        name: "name",
+      },
+      {
+        type: "number",
+        message: "Enter employees ID number.",
+        name: "id",
+      },
+      {
+        type: "input",
+        message: "Enter employees email address.",
+        name: "email",
+      },
+    ])
+    .then(function (data) {
+      const name = data.name;
+      const id = data.id;
+      const email = data.email;
+      const teammate = new Employee(name, id, email);
+      teammateProfile.push(teammate);
+      addTeammates();
+    });
+}
 
 function addTeammates() {
   inquirer
@@ -130,7 +164,12 @@ function addTeammates() {
       {
         type: "list",
         message: "Add more teammates?",
-        choices: ["Yes, an engineer.", "Yes, an intern.", "No, I am finished."],
+        choices: [
+          "Yes, an engineer.",
+          "Yes, an intern.",
+          "Yes, an employee.",
+          "No, I am finished.",
+        ],
         name: "addMoreTeammates",
       },
     ])
@@ -140,16 +179,22 @@ function addTeammates() {
         case "Yes, an engineer.":
           addEngineer();
           break;
-
         case "Yes, an intern.":
           addIntern();
+          break;
+        case "Yes, an employee.":
+          addEmployee();
           break;
         case "No, I am finished.":
           finishProfile();
           break;
       }
     });
-};
+}
+
+function finishProfile() {
+  console.log("Congratulations, Your Team Profile Has Been Generated!");
+}
 // WHEN I select the engineer option
 // THEN I am prompted with enter the engineer’s name, ID, email, and GitHub username,
 
