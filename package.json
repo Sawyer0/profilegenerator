@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "inquirer-menu": "^1.0.0"
+    "inquirer": "^0.11.4",
+    "inquirer-menu": "^1.0.0",
+    "lodash": "^3.10.1"
   }
 }
