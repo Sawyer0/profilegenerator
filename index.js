@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 
+
 // --------- prompt for info
 // input for team manager’s name, employee ID, email address, and office number
 
@@ -11,7 +12,7 @@ const promptUser = () => {
         message: 'Enter a manager’s name.',
       },
       {
-        type: 'input',
+        type: 'number',
         name: 'employee ID',
         message: 'Enter an employee ID.',
       },
@@ -21,7 +22,7 @@ const promptUser = () => {
         message: 'Enter an email address.',
       },
       {
-        type: 'input',
+        type: 'number',
         name: 'office number',
         message: 'Enter an office number.',
       },
@@ -35,21 +36,72 @@ const promptUser = () => {
     }
   ])
 
-  const answer = engineer;
-  
-  switch (true) {
-      // If answer is engineer 
-      case answer = engineer:
-          console.log("engineer");
-          break;
-      // If answer is intern
-      case answer = intern:
-          console.log("intern");
-          break;
-      default:
-          console.log("nobody");
-  }
+  .then(function (data) {
 
+    switch (data.addTeammates) {
+        case "Yes, add an engineer":
+            addEngineer();
+            break;
+
+        case "Yes, add an intern":
+            addIntern();
+            break;
+        case "No, my team is complete":
+          finishProfile();
+            break;
+    }
+});
+}
+
+function addEngineer() {
+    inquirer.prompt([
+        {
+        type: "input",
+        message: "Enter engineers name.",
+        name: "name"
+    },
+    {
+        type: "number",
+        message: "Enter engineers ID number.",
+        name: "id"
+    },
+    {   
+        type: "input",
+        message: "Enter engineers email address.",
+        name: "email"
+    },
+    {   
+        type: "input",
+        message: "Enter engineers GitHub username",
+        name: "github"
+    },
+])
+};
+
+function addIntern() {
+    inquirer.prompt([
+        {
+        type: "input",
+        message: "Enter interns name.",
+        name: "name"
+    },
+    {
+        type: "number",
+        message: "Enter engineers ID number.",
+        name: "id"
+    },
+    {
+        type: "input",
+        message: "Enter engineers email address.",
+        name: "email"
+    },
+    {   
+        type: "input",
+        message: "Enter school for intern.",
+        name: "school"
+    },
+])
+};
 // WHEN I select the engineer option
 // THEN I am prompted with enter the engineer’s name, ID, email, and GitHub username,
 
