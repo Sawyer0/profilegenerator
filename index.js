@@ -9,10 +9,7 @@ const Manager = require("./lib/Manager");
 
 let teammateProfile = [];
 
-// --------- prompt for info
-// input for team manager’s name, employee ID, email address, and office number
-
-promptUser()
+promptUser();
 
 function promptUser() {
   inquirer
@@ -192,12 +189,5 @@ function addTeammates() {
     });
 }
 
-function finishProfile() {
-  console.log("Congratulations, Your Team Profile Has Been Generated!");
-}
-// WHEN I select the engineer option
-// THEN I am prompted with enter the engineer’s name, ID, email, and GitHub username,
-
-//
-
-// --------- output to html
+function init() {}
+init();
