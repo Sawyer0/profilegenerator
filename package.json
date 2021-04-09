@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "express": "^4.17.1",
     "inquirer": "^8.0.0",
     "inquirer-menu": "^1.0.0",
     "lodash": "^3.10.1"
