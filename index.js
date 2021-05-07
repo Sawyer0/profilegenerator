@@ -10,65 +10,154 @@ const Manager = require("./lib/Manager");
 function finishProfile() {}
 
 let teammateProfile = [];
+let Cards = [];
 
 const init = () => {
   inquirer
     .prompt([
       {
-        message: "What is the name of your team?",
-        name: "teamName",
+        type: "input",
+        name: "teamname",
+        message: "What is your team name?",
       },
     ])
-
-    .then((data) => {
-      const team = data.teamName;
-      teammateProfile.push(team);
-      makeTeam();
+    .then(function (data) {
+      const teamname = data.teamname;
+      teammateProfile.push(teamname);
+      addManager();
     });
 };
 
-function makeTeam() {
+function addManager() {
   inquirer
     .prompt([
       {
-        message: "Enter teammates name",
-        name: "teammatename",
+        type: "input",
+        message: "Enter managers name.",
+        name: "name",
       },
       {
-        type: "list",
-        message: "Select teammates role",
-        choices: ["Manager", "Engineer", "Intern", "Employee"],
-        name: "role",
-      },
-      {
-        message: "Enter teammates id",
+        type: "number",
+        message: "Enter managers ID number.",
         name: "id",
       },
       {
-        message: "Enter teammates email address",
+        type: "input",
+        message: "Enter managers email address.",
+        name: "email",
+      },
+      {
+        type: 'number',
+        message: 'what is the managers office number?',
+        name: 'officeNumber',
+      }
+    ])
+    .then(function (data) {
+      const name = data.name;
+      const id = data.id;
+      const email = data.email;
+      const teammate = new Manager(name, id, email);
+      teammateProfile.push(teammate);
+      addTeammates();
+    });
+}
+
+function addEngineer() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter engineers name.",
+        name: "name",
+      },
+      {
+        type: "number",
+        message: "Enter engineers ID number.",
+        name: "id",
+      },
+      {
+        type: "input",
+        message: "Enter engineers email address.",
+        name: "email",
+      },
+      {
+        type: "input",
+        message: "Enter engineers GitHub username",
+        name: "github",
+      },
+    ])
+    .then(function (data) {
+      const name = data.name;
+      const id = data.id;
+      const email = data.email;
+      const github = data.github;
+      const teammate = new Engineer(name, id, email, github);
+      teammateProfile.push(teammate);
+      addTeammates();
+    });
+}
+
+function addIntern() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter interns name.",
+        name: "name",
+      },
+      {
+        type: "number",
+        message: "Enter engineers ID number.",
+        name: "id",
+      },
+      {
+        type: "input",
+        message: "Enter engineers email address.",
+        name: "email",
+      },
+      {
+        type: "input",
+        message: "Enter school for intern.",
+        name: "school",
+      },
+    ])
+    .then(function (data) {
+      const name = data.name;
+      const id = data.id;
+      const email = data.email;
+      const school = data.school;
+      const teammate = new Intern(name, id, email, school);
+      teammateProfile.push(teammate);
+      addTeammates();
+    });
+}
+
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Enter employees name.",
+        name: "name",
+      },
+      {
+        type: "number",
+        message: "Enter employees ID number.",
+        name: "id",
+      },
+      {
+        type: "input",
+        message: "Enter employees email address.",
         name: "email",
       },
     ])
-    .then(function ({ moreTeammates }) {
-      let newMember;
-      let role;
-      if (role === "Engineer") {
-        newMember = new Engineer(role, teammatename, id, email);
-      } else if (role === "Intern") {
-        newMember = new Intern(role, teammatename, id, email);
-      } else if (role === "Manager") {
-        newMember = new Manager(role, teammatename, id, email);
-      } else if (role === "Employee") {
-        newMember = new Employee(role, teammatename, id, email);
-      }
-      teammateProfile.push(newMember);
-      addHtml(newMember).then(function () {
-        if (moreTeammates === "yes") {
-          addTeammates();
-        } else {
-          finishHtml();
-        }
-      });
+    .then(function (data) {
+      const name = data.name;
+      const id = data.id;
+      const email = data.email;
+      const teammate = new Employee(name, id, email);
+      teammateProfile.push(teammate);
+      addTeammates();
     });
 }
 
@@ -78,15 +167,26 @@ function addTeammates() {
       {
         type: "list",
         message: "Add more teammates?",
-        choices: ["Yes", "No, I am finished."],
+        choices: [
+          "Yes, an engineer.",
+          "Yes, an intern.",
+          "Yes, an employee.",
+          "No, I am finished.",
+        ],
         name: "addMoreTeammates",
       },
     ])
 
     .then(function (data) {
       switch (data.addMoreTeammates) {
-        case "Yes":
-          makeTeam();
+        case "Yes, an engineer.":
+          addEngineer();
+          break;
+        case "Yes, an intern.":
+          addIntern();
+          break;
+        case "Yes, an employee.":
+          addEmployee();
           break;
         case "No, I am finished.":
           finishProfile();
@@ -99,83 +199,158 @@ function addTeammates() {
     });
 }
 
+function finishProfile() {
+  teammateProfile.forEach((element) => {
+      switch (element.jobTitle) {
 
-function startHtml() {
-  const html = `<!DOCTYPE html>
+          case 'manager':
+              console.log("element manager: ", ",element");
+              var div =
+                  `<div class="card">
+                      <div class="card-header">
+                          <h6 id="employeeName">${element.name}</h6>
+                          <h6 id="jobTitle"><i class="fas fa-clipboard"></i> manager</h6>
+                      </div>
+                      <div class="card-body">
+                          <ul class="list-group">
+                              <li id="id" class="list-group-item">id: ${element.id}</li>
+                              <li id="email" class="list-group-item">email: <a href="mailto:${element.email}" target="_blank" rel="noopener noreferrer">${element.email}</a></li>
+                              
+                              <li id="officeNumber" class="list-group-item">office: ${element.officeNumber}</li>
+                          </ul>
+                      </div>
+                  </div>`
+              Cards.push(div)
+              break;
+
+          case 'engineer':
+              console.log("element intern : ", element)
+              var div =
+                  `<div class="card">
+                                      <div class="card-header">
+                                          <h6 id="employeeName">${element.name}</h6>
+                                          <h6 id="jobTitle"><i class="fas fa-laptop-code"></i> engineer</h6>
+                                      </div>
+                                      <div class="card-body">
+                                          <ul class="list-group">
+                                              <li id="id" class="list-group-item">id: ${element.id}</li>
+                                              <li id="email" class="list-group-item">email: <a href="mailto:${element.email}" target="_blank" rel="noopener noreferrer">${element.email}</a></li>
+                                              <li id=githubName" class="list-group-item">github:  <a href="https://github.com/${element.githubName}" target="_blank">${element.githubName}</a> </li>
+                                              
+                                             
+                                          </ul>
+                                      </div>
+                                  </div>`
+              Cards.push(div)
+              break;
+
+          case 'intern':
+              var div =
+                  `<div class="card">
+                      <div class="card-header">
+                          <h6 id="employeeName">${element.name}</h6>
+                          <h6 id="jobTitle"><i class="fas fa-user-graduate"></i> intern</h6>
+                      </div>
+                      <div class="card-body">
+                          <ul class="list-group">
+                              <li id="id" class="list-group-item">id: ${element.id}</li>
+                              <li id="email" class="list-group-item">email: <a href="mailto:${element.email}" target="_blank" rel="noopener noreferrer">${element.email}</a></li>
+                              <li id="school" class="list-group-item">school: ${element.school}</li>
+                          </ul>
+                      </div>
+                  </div>`
+              Cards.push(div)
+              break;
+          default: console.log('nothing to do')
+      }
+
+  })
+  console.log(teammateProfile)
+  writeHTML()
+}
+
+function writeHTML() {
+  
+  const htmlArray = []
+  const htmlStart =
+
+
+      `<!DOCTYPE html>
   <html lang="en">
   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-      <title>Team Profile</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+      integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./main/style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;600&display=swap" rel="stylesheet">
+  <title>${teammateProfile[0]}</title>
   </head>
-  <body>
-      <nav class="navbar navbar-dark bg-dark mb-5">
-          <span class="navbar-brand mb-0 h1 w-100 text-center">Team Profile</span>
-      </nav>
-      <div class="container">
-          <div class="row">`;
-  fs.writeFile("./index.html", html, function(err) {
-      if (err) {
-          console.log(err);
-      }
-  });
-  console.log("start");
-}
+   <body>
+      <div class="jumbotron jumbotron-fluid">
+        <h1>${teammateProfile[0]}</h1>
+      </div>
 
-function addHtml(member) {
-  return new Promise(function(resolve, reject) {
-      const name = member.getTeamName();
-      const role = member.getRole();
-      const id = member.getId();
-      const email = member.getEmail();
-      let data = "";
-      if (role === "Engineer") {
-          const gitHub = member.getGithub();
-          data = `<div class="col-6">
-          <div class="card mx-auto mb-3" style="width: 18rem">
-          <h5 class="card-header">${name}<br /><br />Engineer</h5>
-          <ul class="list-group list-group-flush">
-              <li class="list-group-item">ID: ${id}</li>
-              <li class="list-group-item">Email Address: ${email}</li>
-              <li class="list-group-item">GitHub: ${gitHub}</li>
-          </ul>
-          </div>
-      </div>`;
-      } else if (role === "Intern") {
-          const school = member.getSchool();
-          data = `<div class="col-6">
-          <div class="card mx-auto mb-3" style="width: 18rem">
-          <h5 class="card-header">${name}<br /><br />Intern</h5>
-          <ul class="list-group list-group-flush">
-              <li class="list-group-item">ID: ${id}</li>
-              <li class="list-group-item">Email Address: ${email}</li>
-              <li class="list-group-item">School: ${school}</li>
-          </ul>
-          </div>
-      </div>`;
-      } else {
-          const officePhone = member.getOfficeNumber();
-          data = `<div class="col-6">
-          <div class="card mx-auto mb-3" style="width: 18rem">
-          <h5 class="card-header">${name}<br /><br />Manager</h5>
-          <ul class="list-group list-group-flush">
-              <li class="list-group-item">ID: ${id}</li>
-              <li class="list-group-item">Email Address: ${email}</li>
-              <li class="list-group-item">Office Phone: ${officePhone}</li>
-          </ul>
-          </div>
-      </div>`
-      }
-      console.log("adding team member");
-      fs.appendFile("./output/team.html", data, function (err) {
-          if (err) {
-              return reject(err);
-          };
-          return resolve();
-      });
-  });
-}
-startHtml();
+      <div class="container">
+       <div class="card-deck">`;
+
+       htmlArray.push(htmlStart);
+    
+       for (let i = 1; i < teammateProfile.length; i++) {
+         let object = `
+            
+         <div class='columns is-mobile is-centered'>
+           <div class='column is-3 m-5'>
+             <div class="card">
+               <div class="card-content">
+                 <ul>
+                   <li>${teammateProfile[i].name}</li>
+                   <li>${teammateProfile[i].title}</li>
+                   <li>ID: ${teammateProfile[i].id}</li>
+                   <p>Email: <a href="mailto:${teammateProfile[i].email}">${teammateProfile[i].email}</a></p>
+                 </ul>
+               </div>
+             
+           </div>
+           `
+    
+           if (teammateProfile[i].officeNumber) {
+             object += `
+             <p>Office Number: ${teammateProfile[i].officeNumber}</p>
+             `
+           }
+           if (teammateProfile[i].github) {
+             object += `
+             <p>GitHub: <a href="https://github.com/${teammateProfile[i].github}">${teammateProfile[i].github}</a></p>
+             `
+           }
+           if (teammateProfile[i].school) {
+             object += `
+             <p>School: ${teammateProfile[i].school}</p>
+             
+             `
+         }
+         object += `
+         </div>
+         </div>  
+         `
+         htmlArray.push(object)
+         }
+   
+         const htmlEnd = `
+       </div>
+     </body>
+   </html>
+   `
+   htmlArray.push(htmlEnd);
+    
+   fs.writeFile(`./src/${teammateProfile[0]}.html`, htmlArray.join(""), function (err) {
+           console.log(err);
+     })
+   
+   }
 init();
