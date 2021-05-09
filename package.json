@@ -3,6 +3,30 @@
     "express": "^4.17.1",
     "inquirer": "^8.0.0",
     "inquirer-menu": "^1.0.0",
-    "lodash": "^3.10.1"
-  }
+    "jest": "^26.6.3",
+    "lodash": "^3.10.1",
+    "test": "^0.6.0"
+  },
+  "name": "profilegenerator",
+  "description": "A Node JS application that can create a team for you, based on your answers to the prompts.\r - The main goal for this project was to create an application in the CLI using node.js that will dynamically create a html file using your answers to prompts.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sawyer0/profilegenerator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sawyer0/profilegenerator/issues"
+  },
+  "homepage": "https://github.com/Sawyer0/profilegenerator#readme"
 }

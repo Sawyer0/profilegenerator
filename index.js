@@ -16,6 +16,7 @@ const init = () => {
   inquirer
     .prompt([
       {
+        
         type: "input",
         name: "teamname",
         message: "What is your team name?",
@@ -47,10 +48,10 @@ function addManager() {
         name: "email",
       },
       {
-        type: 'number',
-        message: 'what is the managers office number?',
-        name: 'officeNumber',
-      }
+        type: "number",
+        message: "what is the managers office number?",
+        name: "officeNumber",
+      },
     ])
     .then(function (data) {
       const name = data.name;
@@ -201,12 +202,10 @@ function addTeammates() {
 
 function finishProfile() {
   teammateProfile.forEach((element) => {
-      switch (element.jobTitle) {
-
-          case 'manager':
-              console.log("element manager: ", ",element");
-              var div =
-                  `<div class="card">
+    switch (element.jobTitle) {
+      case "manager":
+        console.log("element manager: ", ",element");
+        var div = `<div class="card">
                       <div class="card-header">
                           <h6 id="employeeName">${element.name}</h6>
                           <h6 id="jobTitle"><i class="fas fa-clipboard"></i> manager</h6>
@@ -219,14 +218,13 @@ function finishProfile() {
                               <li id="officeNumber" class="list-group-item">office: ${element.officeNumber}</li>
                           </ul>
                       </div>
-                  </div>`
-              Cards.push(div)
-              break;
+                  </div>`;
+        Cards.push(div);
+        break;
 
-          case 'engineer':
-              console.log("element intern : ", element)
-              var div =
-                  `<div class="card">
+      case "engineer":
+        console.log("element intern : ", element);
+        var div = `<div class="card">
                                       <div class="card-header">
                                           <h6 id="employeeName">${element.name}</h6>
                                           <h6 id="jobTitle"><i class="fas fa-laptop-code"></i> engineer</h6>
@@ -240,13 +238,12 @@ function finishProfile() {
                                              
                                           </ul>
                                       </div>
-                                  </div>`
-              Cards.push(div)
-              break;
+                                  </div>`;
+        Cards.push(div);
+        break;
 
-          case 'intern':
-              var div =
-                  `<div class="card">
+      case "intern":
+        var div = `<div class="card">
                       <div class="card-header">
                           <h6 id="employeeName">${element.name}</h6>
                           <h6 id="jobTitle"><i class="fas fa-user-graduate"></i> intern</h6>
@@ -258,24 +255,20 @@ function finishProfile() {
                               <li id="school" class="list-group-item">school: ${element.school}</li>
                           </ul>
                       </div>
-                  </div>`
-              Cards.push(div)
-              break;
-          default: console.log('nothing to do')
-      }
-
-  })
-  console.log(teammateProfile)
-  writeHTML()
+                  </div>`;
+        Cards.push(div);
+        break;
+      default:
+        console.log("nothing to do");
+    }
+  });
+  console.log(teammateProfile);
+  writeHTML();
 }
 
 function writeHTML() {
-  
-  const htmlArray = []
-  const htmlStart =
-
-
-      `<!DOCTYPE html>
+  const htmlArray = [];
+  const htmlStart = `<!DOCTYPE html>
   <html lang="en">
   <head>
   <meta charset="UTF-8">
@@ -298,10 +291,10 @@ function writeHTML() {
       <div class="container">
        <div class="card-deck">`;
 
-       htmlArray.push(htmlStart);
-    
-       for (let i = 1; i < teammateProfile.length; i++) {
-         let object = `
+  htmlArray.push(htmlStart);
+
+  for (let i = 1; i < teammateProfile.length; i++) {
+    let object = `
             
          <div class='columns is-mobile is-centered'>
            <div class='column is-3 m-5'>
@@ -316,41 +309,44 @@ function writeHTML() {
                </div>
              
            </div>
-           `
-    
-           if (teammateProfile[i].officeNumber) {
-             object += `
+           `;
+
+    if (teammateProfile[i].officeNumber) {
+      object += `
              <p>Office Number: ${teammateProfile[i].officeNumber}</p>
-             `
-           }
-           if (teammateProfile[i].github) {
-             object += `
+             `;
+    }
+    if (teammateProfile[i].github) {
+      object += `
              <p>GitHub: <a href="https://github.com/${teammateProfile[i].github}">${teammateProfile[i].github}</a></p>
-             `
-           }
-           if (teammateProfile[i].school) {
-             object += `
+             `;
+    }
+    if (teammateProfile[i].school) {
+      object += `
              <p>School: ${teammateProfile[i].school}</p>
              
-             `
-         }
-         object += `
+             `;
+    }
+    object += `
          </div>
          </div>  
-         `
-         htmlArray.push(object)
-         }
-   
-         const htmlEnd = `
+         `;
+    htmlArray.push(object);
+  }
+
+  const htmlEnd = `
        </div>
      </body>
    </html>
-   `
-   htmlArray.push(htmlEnd);
-    
-   fs.writeFile(`./src/${teammateProfile[0]}.html`, htmlArray.join(""), function (err) {
-           console.log(err);
-     })
-   
-   }
+   `;
+  htmlArray.push(htmlEnd);
+
+  fs.writeFile(
+    `./src/${teammateProfile[0]}.html`,
+    htmlArray.join(""),
+    function (err) {
+      console.log(err);
+    }
+  );
+}
 init();
